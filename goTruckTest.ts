@@ -89,7 +89,7 @@ d. An exception is thrown during the update operation
 /*
 
 Possible improvements: 
-1. Wrap the body of the cancelOrder method is a try catch block. In catch block, throw InternalServerErrorException and console log the error 
+1. Wrap the body of the cancelOrder method in a try catch block. In the catch block, throw InternalServerErrorException and console log the error 
 2. Check if there is 'orderID' in query string, otherwise throw new BadRequestException("Invalid order ID")
 3. Before checking (order.isCancelled), check if (order === null) { throw new UnprocessableEntityException() }
 4. await the response from the update operation, e.g. await this.prisma.purchaseOrder.update... , return "success" after the update operation has been done
