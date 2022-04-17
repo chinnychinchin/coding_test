@@ -1,4 +1,4 @@
-// Question 1
+//// Question 1
 
 interface DigitRandomGenerator {
 
@@ -9,6 +9,8 @@ interface DigitRandomGenerator {
 class MyDigitRandomGenerator implements DigitRandomGenerator { 
     
     generateDigit = () => {
+
+        // ** METHOD 1 **  
 
         // const findCeil = (arr: any[], r: number, l: number, h: number) => {
         //     let mid: number;
@@ -48,6 +50,7 @@ class MyDigitRandomGenerator implements DigitRandomGenerator {
         // const value_to_return = arr[indexc]
         // return value_to_return;
        
+        // ** METHOD 2 **
         var num=Math.random();
         if(num < 0.1) return 1; 
         else if(num < 0.2) return 2;
@@ -66,15 +69,14 @@ class MyDigitRandomGenerator implements DigitRandomGenerator {
 
 }
 
-var myDigitRandGen = new MyDigitRandomGenerator()
+// ** Check result of question 1 solution **
+// var myDigitRandGen = new MyDigitRandomGenerator()
+// for (let i = 1; i <= 100; i ++) {
+//     console.log(myDigitRandGen.generateDigit())
+// }
 
 
-for (let i = 1; i <= 100; i ++) {
-    console.log(myDigitRandGen.generateDigit())
-}
-
-
-// Question 2a 
+//// Question 2a 
 /*
 
 Possible causes: 
@@ -90,9 +92,10 @@ d. An exception is thrown during the update operation
 
 Possible improvements: 
 1. Wrap the body of the cancelOrder method in a try catch block. In the catch block, throw InternalServerErrorException and console log the error 
-2. Check if there is 'orderID' in query string, otherwise throw new BadRequestException("Invalid order ID")
+2. First, check if there is 'orderID' in query string, otherwise throw new BadRequestException("Invalid order ID")
 3. Before checking (order.isCancelled), check if (order === null) { throw new UnprocessableEntityException() }
-4. await the response from the update operation, e.g. await this.prisma.purchaseOrder.update... , return "success" after the update operation has been done
+4. Await the response from the update operation, e.g. await this.prisma.purchaseOrder.update... ; return "success" only after the update operation has been completed successfully, 
+   so that in the event of a server/database error or network error that causes the update to fail to perform, the client will be notified with the appropriate status code, and corresponding action can be taken such as to retry at another time.
 
 */
 
@@ -100,8 +103,8 @@ Possible improvements:
 /*
 
 - Perform validation testing 
-1. a request with valid order ID that is not cancelled - expected response "status 200, success"
-2. a request with valid order ID that had been cancelled - expected response "status 400, message: Order is not active"
+1. a request with valid order ID that had not been cancelled prior - expected response "status 200, success"
+2. a request with valid order ID that had been cancelled previously - expected response "status 400, message: Order is not active"
 3. a request without query string "orderID" - expected response (based on the improvements in 2b) "status 400, message: Invalid order ID"
 4. a request with order ID properly formed but non-existing order based on it - expected response (based on the improvements in 2b) "status 422"
 5. simulate server error but killing the server or cutting off connection with the database - expected response "status 500, Internal server error"
